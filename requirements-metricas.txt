@@ -1,0 +1,4 @@
+# Python 3.11 ou superior (testado com 3.14).
+requests==2.34.2
+google-auth==2.53.0
+google-ads==31.0.0

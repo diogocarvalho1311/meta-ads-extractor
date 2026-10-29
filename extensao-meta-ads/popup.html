@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>Meta Ads Extractor</title>
+  <style>
+    body { font-family: Arial, sans-serif; width: 320px; padding: 16px; }
+    h3 { margin: 0 0 12px; }
+    button { padding: 8px 16px; cursor: pointer; width: 100%; margin-bottom: 8px; }
+    #status { font-size: 12px; color: #555; margin-top: 8px; white-space: pre-wrap; }
+    #status.ok { color: green; }
+    #status.err { color: red; }
+    button:disabled { cursor: wait; opacity: .6; }
+  </style>
+</head>
+<body>
+  <h3>Meta Ads Extractor</h3>
+  <select id="date-preset" aria-label="Período das métricas">
+    <option value="yesterday">Ontem</option>
+    <option value="today">Hoje</option>
+    <option value="last_7d">Últimos 7 dias</option>
+    <option value="last_30d">Últimos 30 dias</option>
+  </select>
+  <button id="btn-test" style="margin-top:8px">Testar: anúncios (1 nível)</button>
+  <button id="btn-export" style="background:#1877f2;color:#fff;border:none;border-radius:4px">
+    Exportar tudo → JSON
+  </button>
+  <div id="status" role="status" aria-live="polite">Selecione o período e exporte.</div>
+  <script src="popup.js"></script>
+</body>
+</html>

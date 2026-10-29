@@ -1,0 +1,13 @@
+{
+  "name": "meta-ads-extractor-portfolio",
+  "version": "0.1.1",
+  "private": true,
+  "type": "module",
+  "description": "Extensao Chrome, importador e painel de metricas de trafego pago",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test tests/test_extension.mjs && node tests/test_dashboard_d1.mjs"
+  }
+}

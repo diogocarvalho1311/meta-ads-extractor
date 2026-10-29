@@ -1,0 +1,59 @@
+# Credenciais — NUNCA subir
+.env
+.mcp.json
+
+# Dependências
+node_modules/
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Arquivos gerados localmente
+cookies.txt
+*.log
+
+# Backups privados e dados locais
+backups/
+.wrangler/
+__pycache__/
+*.pyc
+.dev.vars
+cloudflare/.dev.vars
+
+
+# Segredos e configuracoes locais (inclui variantes de .env)
+.env.*
+!.env.example
+!.env.d1.example
+**/.env
+**/.env.*
+!**/.env.example
+!**/.env.d1.example
+google-services.json
+**/service-account*.json
+**/credentials*.json
+**/client_secret*.json
+**/token*.json
+**/.dev.vars*
+.cf-login/
+.secrets/
+credentials/
+.notion_org_ids.json
+
+# Exportacoes e arquivos privados da migracao
+backups/
+
+# Dados operacionais e estado privado
+**/*_id_map.json
+**/*_ids.json
+**/*_state.json
+scripts/*.csv
+scripts/camp.json
+scripts/conj.json
+scripts/anun.json
+exports/
+downloads/
+.venv/
+.vercel/
+*.zip

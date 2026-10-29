@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo | Dashboard de Tráfego</title>
+<link rel="stylesheet" href="/css/styles.css">
+<style>
+  .login-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; background: var(--color-bg); }
+  .login-card { width: 100%; max-width: 360px; background: #48b8c9; border: none; border-radius: 16px; padding: 36px 32px; text-align: center; box-shadow: 0 8px 32px rgba(72,184,201,0.25); }
+  .login-logo { width: 140px; margin: 0 auto 20px; display: block; }
+  .login-card p { color: rgba(255,255,255,0.8); font-size: 0.85rem; margin-bottom: 24px; }
+  .login-card input { width: 100%; padding: 11px 12px; border-radius: 8px; border: none; background: rgba(255,255,255,0.95); color: var(--color-text); font-size: 0.95rem; margin-bottom: 12px; text-align: center; }
+  .login-card input::placeholder { color: #aaa; text-align: center; }
+  .login-card input:focus { outline: 2px solid rgba(255,255,255,0.6); }
+  .login-card button { width: 100%; padding: 11px 12px; border-radius: 8px; border: none; background: #fff; color: #48b8c9; font-weight: 700; cursor: pointer; font-size: 0.95rem; }
+  .login-card button:hover { background: rgba(255,255,255,0.9); }
+  .login-card button:disabled { opacity: 0.6; cursor: default; }
+  .login-error { color: rgba(255,255,255,0.9); font-size: 0.82rem; min-height: 18px; margin-top: 10px; font-weight: 600; }
+</style>
+</head>
+<body>
+  <div class="login-wrap">
+    <form class="login-card" id="login-form">
+      <h2 style="color:#fff">Dashboard de Tráfego</h2>
+      <p>Dashboard de tráfego — acesso restrito</p>
+      <input type="password" id="password" placeholder="Senha" autofocus required>
+      <button type="submit" id="submit-btn">Entrar</button>
+      <div class="login-error" id="login-error"></div>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById('login-form');
+    const errorEl = document.getElementById('login-error');
+    const btn = document.getElementById('submit-btn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorEl.textContent = '';
+      btn.disabled = true;
+      btn.textContent = 'Entrando...';
+      try {
+        const password = document.getElementById('password').value;
+        const resp = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password }),
+        });
+        if (!resp.ok) {
+          const data = await resp.json().catch(() => ({}));
+          throw new Error(data.error || 'Senha incorreta.');
+        }
+        window.location.href = '/index.html';
+      } catch (err) {
+        errorEl.textContent = err.message;
+        btn.disabled = false;
+        btn.textContent = 'Entrar';
+      }
+    });
+  </script>
+</body>
+</html>

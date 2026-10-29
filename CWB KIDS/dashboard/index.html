@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo | Dashboard de Tráfego</title>
+<link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<div class="layout-wrapper">
+
+  <!-- ════════ SIDEBAR ════════ -->
+  <aside class="sidebar">
+    <div class="sidebar-brand"><strong style="color:#fff;font-size:18px">AUTOMAÇÃO ADS<br><small style="font-size:11px">DEMO · DADOS FICTÍCIOS</small></strong></div>
+
+    <div class="sidebar-period">
+      <button class="period-trigger" id="period-trigger">
+        <span id="period-label">Todos os dados</span>
+        <span class="period-caret">▾</span>
+      </button>
+    </div>
+
+    <nav id="tabs">
+      <button data-tab="geral" class="active"><span class="tab-icon">📊</span>Dados Gerais</button>
+      <button data-tab="meta"><span class="tab-icon tab-icon-img"><img src="/images/meta_PNG5.png" alt="Meta"></span>Meta Ads</button>
+      <button data-tab="google"><span class="tab-icon tab-icon-img"><img src="/images/google-ads.svg" alt="Google Ads"></span>Google Ads</button>
+      <button data-tab="marketplace"><span class="tab-icon">🛒</span>Marketplace</button>
+      <button data-tab="rel-semanal"><span class="tab-icon">📅</span>Rel. Semanais</button>
+      <button data-tab="rel-mensal"><span class="tab-icon">📆</span>Rel. Mensais</button>
+    </nav>
+  </aside>
+
+  <!-- ════════ POPUP DE PERÍODO (fora do sidebar) ════════ -->
+  <div class="dp-popup" id="dp-popup" style="display:none">
+    <div class="dp-left">
+      <div class="dp-preset-list">
+        <button class="dp-preset active" data-preset="all">Todos os dados</button>
+        <button class="dp-preset" data-preset="yesterday">Ontem</button>
+        <button class="dp-preset" data-preset="7">Últimos 7 dias</button>
+        <button class="dp-preset" data-preset="14">Últimos 14 dias</button>
+        <button class="dp-preset" data-preset="30">Últimos 30 dias</button>
+      </div>
+      <div class="dp-months-header">MESES</div>
+      <div class="dp-months-list" id="dp-months-list"></div>
+    </div>
+    <div class="dp-right">
+      <div class="dp-calendars" id="dp-calendars"></div>
+      <div class="dp-footer">
+        <span class="dp-range-label" id="dp-range-label">clique em dois dias para intervalo personalizado</span>
+        <div class="dp-actions">
+          <button id="dp-cancel">Cancelar</button>
+          <button id="dp-apply">Aplicar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════ CONTEÚDO ════════ -->
+  <div class="content-area">
+
+    <header class="topbar">
+      <h1 class="topbar-title" id="topbar-title">Visão Geral</h1>
+      <div class="topbar-right">
+        <button class="topbar-logout" id="logout-btn">Sair</button>
+      </div>
+    </header>
+
+    <main>
+
+      <!-- ════════════ DADOS GERAIS ════════════ -->
+      <section class="tab-panel active" id="panel-geral">
+        <h2 class="section-title">Visão Geral</h2>
+        <div class="kpi-bar" id="kpi-geral"></div>
+
+        <h2 class="section-title">Comparativo por Canal</h2>
+        <div class="table-wrap" id="canal-table-wrap"></div>
+
+        <h2 class="section-title">Investimento por Canal</h2>
+        <div class="chart-grid">
+          <div class="chart-card"><h3>Investimento por Canal</h3><canvas id="chart-geral-canal"></canvas></div>
+          <div class="chart-card"><h3>Compras por Canal</h3><canvas id="chart-geral-compras"></canvas></div>
+        </div>
+
+        <h2 class="section-title">Vendas por Campanha</h2>
+        <div class="chart-full"><canvas id="chart-geral-vendas-camp"></canvas></div>
+
+        <h2 class="section-title">Evolução Diária</h2>
+        <div class="chart-full"><h3>Investimento e Receita — Meta + Google</h3><canvas id="chart-geral-evolucao"></canvas></div>
+      </section>
+
+      <!-- ════════════ META ADS ════════════ -->
+      <section class="tab-panel" id="panel-meta">
+        <h2 class="section-title">Resumo Meta Ads</h2>
+        <div class="kpi-bar kpi-bar--compact" id="kpi-meta"></div>
+
+        <h2 class="section-title">Investimento por Campanha</h2>
+        <div class="chart-grid">
+          <div class="chart-card"><h3>Distribuição</h3><canvas id="chart-meta-invest-camp"></canvas></div>
+        </div>
+
+        <h2 class="section-title">Top 3 Criativos por CTR</h2>
+        <div class="criativo-grid" id="top-criativos-meta"></div>
+
+        <h2 class="section-title">Tendência</h2>
+        <div class="chart-full"><h3>Investimento e Receita por dia</h3><canvas id="chart-meta-tendencia"></canvas></div>
+
+        <h2 class="section-title">Funil de Conversão</h2>
+        <div class="funnel" id="funnel-meta"></div>
+
+        <button class="detail-toggle" data-target="detail-meta">Ver detalhamento (campanhas, conjuntos, anúncios)</button>
+        <div class="detail-section" id="detail-meta">
+          <h2 class="section-title">Campanhas</h2>
+          <div class="table-wrap"><table id="table-meta-campanhas"><thead></thead><tbody></tbody></table></div>
+          <h2 class="section-title">Conjuntos de Anúncio</h2>
+          <div class="table-wrap"><table id="table-meta-conjuntos"><thead></thead><tbody></tbody></table></div>
+          <h2 class="section-title">Anúncios</h2>
+          <div class="table-wrap"><table id="table-meta-anuncios"><thead></thead><tbody></tbody></table></div>
+        </div>
+      </section>
+
+      <!-- ════════════ GOOGLE ADS ════════════ -->
+      <section class="tab-panel" id="panel-google">
+        <h2 class="section-title">Resumo Google Ads</h2>
+        <div class="kpi-bar kpi-bar--compact" id="kpi-google"></div>
+
+        <h2 class="section-title">Investimento e Impressões</h2>
+        <div class="chart-grid">
+          <div class="chart-card"><h3>Investimento por Campanha</h3><canvas id="chart-google-invest-camp"></canvas></div>
+          <div class="chart-card"><h3>Parcela de Impressões (média do período)</h3><canvas id="chart-google-impshare"></canvas></div>
+        </div>
+
+        <h2 class="section-title">Tendência</h2>
+        <div class="chart-full"><h3>Investimento e Receita por dia</h3><canvas id="chart-google-tendencia"></canvas></div>
+
+        <h2 class="section-title">Funil de Conversão</h2>
+        <div class="funnel" id="funnel-google"></div>
+
+        <h2 class="section-title">Top 10 Termos de Busca</h2>
+        <div class="table-wrap"><table id="table-google-termos"><thead></thead><tbody></tbody></table></div>
+
+        <button class="detail-toggle" data-target="detail-google">Ver detalhamento (campanhas e grupos)</button>
+        <div class="detail-section" id="detail-google">
+          <h2 class="section-title">Campanhas</h2>
+          <div class="table-wrap"><table id="table-google-campanhas"><thead></thead><tbody></tbody></table></div>
+          <h2 class="section-title">Grupos de Anúncios</h2>
+          <div class="table-wrap"><table id="table-google-grupos"><thead></thead><tbody></tbody></table></div>
+        </div>
+      </section>
+
+      <!-- ════════════ MARKETPLACE ════════════ -->
+      <section class="tab-panel" id="panel-marketplace">
+        <h2 class="section-title">Resumo Marketplace</h2>
+        <div class="kpi-bar" id="kpi-marketplace"></div>
+
+        <h2 class="section-title">Evolução Diária</h2>
+        <div class="chart-full"><h3>Pedidos e Receita por dia</h3><canvas id="chart-marketplace-evolucao"></canvas></div>
+
+        <h2 class="section-title">Pedidos por Marketplace</h2>
+        <div class="chart-grid">
+          <div class="chart-card"><h3>Pedidos por Canal</h3><canvas id="chart-marketplace-pedidos"></canvas></div>
+          <div class="chart-card"><h3>Receita por Canal</h3><canvas id="chart-marketplace-receita"></canvas></div>
+        </div>
+
+        <h2 class="section-title">Vendas por Marketplace</h2>
+        <div class="table-wrap"><table id="table-marketplace"><thead></thead><tbody></tbody></table></div>
+      </section>
+
+      <!-- ════════════ RELATÓRIO SEMANAL ════════════ -->
+      <section class="tab-panel" id="panel-rel-semanal">
+        <div class="period-bar">
+          <select id="select-semana"></select>
+        </div>
+        <div class="report-section-tabs">
+          <button class="rst-btn active" data-section="rs-geral">Dados Gerais</button>
+          <button class="rst-btn" data-section="rs-meta">Meta Ads</button>
+          <button class="rst-btn" data-section="rs-google">Google Ads</button>
+          <button class="rst-btn" data-section="rs-marketplace">Marketplace</button>
+          <button class="rst-btn" data-section="rs-insights">Insights</button>
+        </div>
+
+        <div class="report-section" id="rs-geral">
+          <h2 class="section-title">Visão Geral</h2>
+          <div class="kpi-bar" id="kpi-rel-semanal"></div>
+          <h2 class="section-title">Comparativo por Canal</h2>
+          <div class="table-wrap" id="canal-table-rel-semanal"></div>
+          <h2 class="section-title">Investimento por Canal</h2>
+          <div class="chart-grid">
+            <div class="chart-card"><h3>Investimento por Canal</h3><canvas id="chart-rel-semanal-canal"></canvas></div>
+            <div class="chart-card"><h3>Compras por Canal</h3><canvas id="chart-rel-semanal-compras"></canvas></div>
+          </div>
+          <h2 class="section-title">Vendas por Campanha</h2>
+          <div class="chart-full"><canvas id="chart-rel-semanal-vendas-camp"></canvas></div>
+          <h2 class="section-title">Evolução Diária</h2>
+          <div class="chart-full"><canvas id="chart-rel-semanal-evolucao"></canvas></div>
+          <h2 class="section-title">Top Campanhas</h2>
+          <div class="table-wrap"><table id="table-rel-semanal"><thead></thead><tbody></tbody></table></div>
+        </div>
+
+        <div class="report-section" id="rs-meta" style="display:none">
+          <h2 class="section-title">Meta Ads</h2>
+          <div class="kpi-bar kpi-bar--compact" id="kpi-rel-semanal-meta"></div>
+          <h2 class="section-title">Investimento por Campanha</h2>
+          <div class="chart-grid">
+            <div class="chart-card"><h3>Distribuição</h3><canvas id="chart-rel-semanal-meta-invest"></canvas></div>
+          </div>
+          <h2 class="section-title">Tendência</h2>
+          <div class="chart-full"><h3>Investimento e Receita por dia</h3><canvas id="chart-rel-semanal-meta-tend"></canvas></div>
+          <h2 class="section-title">Funil Meta Ads</h2>
+          <div class="funnel" id="funnel-rel-semanal-meta"></div>
+          <h2 class="section-title">Top 3 Criativos por CTR</h2>
+          <div class="criativo-grid" id="criativos-rel-semanal"></div>
+        </div>
+
+        <div class="report-section" id="rs-google" style="display:none">
+          <h2 class="section-title">Google Ads</h2>
+          <div class="kpi-bar kpi-bar--compact" id="kpi-rel-semanal-google"></div>
+          <h2 class="section-title">Investimento e Impressões</h2>
+          <div class="chart-grid">
+            <div class="chart-card"><h3>Investimento por Campanha</h3><canvas id="chart-rel-semanal-google-invest"></canvas></div>
+            <div class="chart-card"><h3>Parcela de Impressões (média do período)</h3><canvas id="chart-rel-semanal-google-imp"></canvas></div>
+          </div>
+          <h2 class="section-title">Tendência</h2>
+          <div class="chart-full"><h3>Investimento e Receita por dia</h3><canvas id="chart-rel-semanal-google-tend"></canvas></div>
+          <h2 class="section-title">Funil Google Ads</h2>
+          <div class="funnel" id="funnel-rel-semanal-google"></div>
+          <h2 class="section-title">Top 10 Termos de Busca</h2>
+          <div class="table-wrap"><table id="table-rel-semanal-termos"><thead></thead><tbody></tbody></table></div>
+        </div>
+
+        <div class="report-section" id="rs-marketplace" style="display:none">
+          <h2 class="section-title">Marketplace</h2>
+          <div class="kpi-bar" id="kpi-rel-semanal-marketplace"></div>
+          <h2 class="section-title">Evolução Diária</h2>
+          <div class="chart-full"><h3>Pedidos e Receita por dia</h3><canvas id="chart-rel-semanal-marketplace"></canvas></div>
+          <h2 class="section-title">Pedidos por Marketplace</h2>
+          <div class="chart-grid">
+            <div class="chart-card"><h3>Pedidos por Canal</h3><canvas id="chart-rel-semanal-mkt-pedidos"></canvas></div>
+            <div class="chart-card"><h3>Receita por Canal</h3><canvas id="chart-rel-semanal-mkt-receita"></canvas></div>
+          </div>
+          <h2 class="section-title">Vendas por Marketplace</h2>
+          <div class="table-wrap"><table id="table-rel-semanal-marketplace"><thead></thead><tbody></tbody></table></div>
+        </div>
+
+        <div class="report-section" id="rs-insights" style="display:none">
+          <h2 class="section-title">Insights</h2>
+          <div class="insights-grid" id="insights-rel-semanal"></div>
+        </div>
+      </section>
+
+      <!-- ════════════ RELATÓRIO MENSAL ════════════ -->
+      <section class="tab-panel" id="panel-rel-mensal">
+        <div class="period-bar">
+          <select id="select-mes"></select>
+        </div>
+        <div class="report-section-tabs">
+          <button class="rst-btn active" data-section="rm-geral">Dados Gerais</button>
+          <button class="rst-btn" data-section="rm-meta">Meta Ads</button>
+          <button class="rst-btn" data-section="rm-google">Google Ads</button>
+          <button class="rst-btn" data-section="rm-marketplace">Marketplace</button>
+          <button class="rst-btn" data-section="rm-insights">Insights</button>
+        </div>
+
+        <div class="report-section" id="rm-geral">
+          <h2 class="section-title">Visão Geral</h2>
+          <div class="kpi-bar" id="kpi-rel-mensal"></div>
+          <h2 class="section-title">Comparativo por Canal</h2>
+          <div class="table-wrap" id="canal-table-rel-mensal"></div>
+          <h2 class="section-title">Investimento por Canal</h2>
+          <div class="chart-grid">
+            <div class="chart-card"><h3>Investimento por Canal</h3><canvas id="chart-rel-mensal-canal"></canvas></div>
+            <div class="chart-card"><h3>Compras por Canal</h3><canvas id="chart-rel-mensal-compras"></canvas></div>
+          </div>
+          <h2 class="section-title">Vendas por Campanha</h2>
+          <div class="chart-full"><canvas id="chart-rel-mensal-vendas-camp"></canvas></div>
+          <h2 class="section-title">Evolução Diária</h2>
+          <div class="chart-full"><canvas id="chart-rel-mensal-evolucao"></canvas></div>
+          <h2 class="section-title">Top Campanhas</h2>
+          <div class="table-wrap"><table id="table-rel-mensal"><thead></thead><tbody></tbody></table></div>
+        </div>
+
+        <div class="report-section" id="rm-meta" style="display:none">
+          <h2 class="section-title">Meta Ads</h2>
+          <div class="kpi-bar kpi-bar--compact" id="kpi-rel-mensal-meta"></div>
+          <h2 class="section-title">Investimento por Campanha</h2>
+          <div class="chart-grid">
+            <div class="chart-card"><h3>Distribuição</h3><canvas id="chart-rel-mensal-meta-invest"></canvas></div>
+          </div>
+          <h2 class="section-title">Tendência</h2>
+          <div class="chart-full"><h3>Investimento e Receita por dia</h3><canvas id="chart-rel-mensal-meta-tend"></canvas></div>
+          <h2 class="section-title">Funil Meta Ads</h2>
+          <div class="funnel" id="funnel-rel-mensal-meta"></div>
+          <h2 class="section-title">Top 3 Criativos por CTR</h2>
+          <div class="criativo-grid" id="criativos-rel-mensal"></div>
+        </div>
+
+        <div class="report-section" id="rm-google" style="display:none">
+          <h2 class="section-title">Google Ads</h2>
+          <div class="kpi-bar kpi-bar--compact" id="kpi-rel-mensal-google"></div>
+          <h2 class="section-title">Investimento e Impressões</h2>
+          <div class="chart-grid">
+            <div class="chart-card"><h3>Investimento por Campanha</h3><canvas id="chart-rel-mensal-google-invest"></canvas></div>
+            <div class="chart-card"><h3>Parcela de Impressões (média do período)</h3><canvas id="chart-rel-mensal-google-imp"></canvas></div>
+          </div>
+          <h2 class="section-title">Tendência</h2>
+          <div class="chart-full"><h3>Investimento e Receita por dia</h3><canvas id="chart-rel-mensal-google-tend"></canvas></div>
+          <h2 class="section-title">Funil Google Ads</h2>
+          <div class="funnel" id="funnel-rel-mensal-google"></div>
+          <h2 class="section-title">Top 10 Termos de Busca</h2>
+          <div class="table-wrap"><table id="table-rel-mensal-termos"><thead></thead><tbody></tbody></table></div>
+        </div>
+
+        <div class="report-section" id="rm-marketplace" style="display:none">
+          <h2 class="section-title">Marketplace</h2>
+          <div class="kpi-bar" id="kpi-rel-mensal-marketplace"></div>
+          <h2 class="section-title">Evolução Diária</h2>
+          <div class="chart-full"><h3>Pedidos e Receita por dia</h3><canvas id="chart-rel-mensal-marketplace"></canvas></div>
+          <h2 class="section-title">Pedidos por Marketplace</h2>
+          <div class="chart-grid">
+            <div class="chart-card"><h3>Pedidos por Canal</h3><canvas id="chart-rel-mensal-mkt-pedidos"></canvas></div>
+            <div class="chart-card"><h3>Receita por Canal</h3><canvas id="chart-rel-mensal-mkt-receita"></canvas></div>
+          </div>
+          <h2 class="section-title">Vendas por Marketplace</h2>
+          <div class="table-wrap"><table id="table-rel-mensal-marketplace"><thead></thead><tbody></tbody></table></div>
+        </div>
+
+        <div class="report-section" id="rm-insights" style="display:none">
+          <h2 class="section-title">Insights</h2>
+          <div class="insights-grid" id="insights-rel-mensal"></div>
+        </div>
+      </section>
+
+    </main>
+  </div><!-- .content-area -->
+</div><!-- .layout-wrapper -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.js" integrity="sha384-zYPBGXwO4633CABX/5Spf6emCKUJCfoOkhOMYyxMsatqQZPnDblmmOewfjsIVWCM" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0" integrity="sha384-y49Zu59jZHJL/PLKgZPv3k2WI9c0Yp3pWB76V8OBVCb0QBKS8l4Ff3YslzHVX76Y" crossorigin="anonymous"></script>
+<script src="/js/app.js"></script>
+</body>
+</html>

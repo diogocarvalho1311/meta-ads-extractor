@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "Meta Ads Extractor",
+  "version": "0.1.1",
+  "description": "Extrai métricas do Meta Ads Manager automaticamente",
+  "permissions": [
+    "activeTab",
+    "downloads"
+  ],
+  "host_permissions": [
+    "https://adsmanager.facebook.com/*",
+    "https://graph.facebook.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://adsmanager.facebook.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Meta Ads Extractor"
+  }
+}
